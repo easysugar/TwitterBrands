@@ -1,9 +1,9 @@
-from twitter import Api
+import twitter
 
 
 class Twitter:
     def __init__(self, config):
-        self.api = Api(**config)
+        self.api = twitter.Api(**config)
 
     def _get_texts(self, username, last_id):
         tweets = self.api.GetUserTimeline(screen_name=username, max_id=last_id, count=200,
@@ -11,7 +11,7 @@ class Twitter:
         if not tweets:
             return [], None
         last_id = tweets[-1].id - 1
-        texts = [t.text for t in tweets]
+        texts = [t.full_text for t in tweets]
         return texts, last_id
 
     def get_texts(self, username, max_count=None):
