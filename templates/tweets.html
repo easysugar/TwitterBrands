@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tweets: {{ username }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+</head>
+<body class="bg-dark">
+    <table style="margin-top: 100px; width: 50%" class="mx-auto table-striped table table-light table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Number</th>
+                <th>Text</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i, text in result %}
+                <tr>
+                    <th>{{ i }}</th>
+                    <td>{{ text }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
