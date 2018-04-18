@@ -1,5 +1,6 @@
 from twitter import Api
 
+
 class Twitter:
     def __init__(self, config):
         self.api = Api(**config)
