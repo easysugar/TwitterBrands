@@ -1,20 +1,17 @@
 import json
 
-from flask import Flask
+from flask import Flask, render_template
 
 from utils import wrappers
 
 app = Flask(__name__)
 
 
-@app.route('/')
-def main():
-    return "Hi there"
-
-
-@app.route('/api/tweets')
+@app.route('/api/tweets/<username>')
 def get_tweets(username):
-    return json.dumps(twitter.get_texts(username), ensure_ascii=False)
+    result = twitter.get_texts(username, max_count=100)
+    result = list(enumerate(result))
+    return render_template('tweets.html', username=username, result=result)
 
 
 if __name__ == '__main__':
