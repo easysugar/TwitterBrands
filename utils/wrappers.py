@@ -1,3 +1,6 @@
+import requests
+import json
+
 import twitter
 
 
@@ -28,3 +31,34 @@ class Twitter:
                 yield t
             if max_count and curr_count >= max_count:
                 break
+
+
+class ToneAnalyzer:
+    URL = 'https://gateway.watsonplatform.net/tone-analyzer/api/v3/tone'
+
+    def __init__(self, config):
+        self.auth = (config['username'], config['password'])
+
+    def _send_request(self, text):
+        headers = {'Content-Type': 'application/json'}
+        params = [('version', '2016-05-19')]
+        data = json.dumps({'text': text})
+        response = requests.post(self.URL,
+                                 headers=headers,
+                                 params=params,
+                                 data=data.encode('utf8'),
+                                 auth=self.auth)
+        return response
+
+    def _extract_response(self, response):
+        if response.status_code != 200:
+            return None
+        response = response.json()
+        tones = response['document_tone']['tone_categories'][0]['tones']
+        tones = {t['tone_name']: t['score'] for t in tones}
+        return tones
+
+    def analyze(self, text):
+        response = self._send_request(text)
+        tones = self._extract_response(response)
+        return tones

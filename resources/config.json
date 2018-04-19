@@ -5,5 +5,10 @@
     "access_token_secret": "access_token_secret",
     "consumer_secret": "consumer_secret",
     "tweet_mode": "extended"
+  },
+  "tone_analyzer": {
+    "username": "username",
+    "password": "password"
   }
+
 }
