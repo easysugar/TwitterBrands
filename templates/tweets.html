@@ -7,18 +7,28 @@
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 </head>
 <body class="bg-dark">
-    <table style="margin-top: 100px; width: 50%" class="mx-auto table-striped table table-light table-bordered">
-        <thead class="thead-dark">
+    <table style="font-size: 125%; margin-top: 100px; width: 70%" class="mx-auto table-hover table table-light table-bordered">
+        <thead class="thead-light">
             <tr>
                 <th>Number</th>
                 <th>Text</th>
+                <th>Anger😠</th>
+                <th>Disgust🤢</th>
+                <th>Fear😨</th>
+                <th>Joy😀</th>
+                <th>Sadness😞</th>
             </tr>
         </thead>
         <tbody>
-            {% for i, text in result %}
+            {% for i, item in result %}
                 <tr>
                     <th>{{ i }}</th>
-                    <td>{{ text }}</td>
+                    <td>{{ item['text'] }}</td>
+                    <td>{{ item['Anger'] }}</td>
+                    <td>{{ item['Disgust'] }}</td>
+                    <td>{{ item['Fear'] }}</td>
+                    <td>{{ item['Joy'] }}</td>
+                    <td>{{ item['Sadness'] }}</td>
                 </tr>
             {% endfor %}
         </tbody>
