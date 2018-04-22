@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Twitter Brands Service</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+</head>
+<body class="bg-dark" style="font-size: 125%;">
+    <form action="/" method="POST">
+        <div class="input-group mb-3 mx-auto" style="width: 40%; margin-top: 200px">
+            <input type="text" class="form-control" placeholder="Type twitter username" name="username"
+                   aria-label="Input text" aria-describedby="basic-addon2"/>
+        </div>
+    </form>
+    {% if result %}
+        <table style="width: 75%" class="mx-auto table-hover table table-light table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Text</th>
+                    {% if show_brand %}
+                        <th>Brand</th>
+                    {% endif %}
+                    {% if show_tones %}
+                        <th>Anger😠</th>
+                        <th>Disgust🤢</th>
+                        <th>Fear😨</th>
+                        <th>Joy😀</th>
+                        <th>Sadness😞</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in result %}
+                    <tr>
+                        <td>{{ item['text'] }}</td>
+                        {% if show_brand %}
+                            <td>{{ item['brands'] }}</td>
+                        {% endif %}
+                        {% if show_tones %}
+                            <td>{{ item['tones']['Anger']|round(2) }}</td>
+                            <td>{{ item['tones']['Disgust']|round(2) }}</td>
+                            <td>{{ item['tones']['Fear']|round(2) }}</td>
+                            <td>{{ item['tones']['Joy']|round(2) }}</td>
+                            <td>{{ item['tones']['Sadness']|round(2) }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</body>
+</html>

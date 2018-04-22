@@ -13,7 +13,7 @@ def _get_tweets(username, n=None, tone=False, brands=False):
     for text in twitter.get_texts(username, n):
         tweet = {'text': text}
         if tone:
-            tweet['tone'] = tone_analyzer.analyze(text)
+            tweet['tones'] = tone_analyzer.analyze(text)
         if brands:
             tweet['brands'] = brand_detector.find(text)
         tweets.append(tweet)
@@ -27,6 +27,16 @@ def get_tweets(username):
     count = request.args.get('count') or 10
     tweets = _get_tweets(username, count, tone, brands)
     return json.dumps(tweets, ensure_ascii=False)
+
+
+@app.route('/', methods=['POST', 'GET'])
+def main():
+    if request.method == 'GET':
+        return render_template('main.html')
+    if request.method == 'POST':
+        username = request.form['username']
+        result = _get_tweets(username, 10, tone=True, brands=True)
+        return render_template('main.html', result=result, show_tones=True, show_brand=True)
 
 
 if __name__ == '__main__':
