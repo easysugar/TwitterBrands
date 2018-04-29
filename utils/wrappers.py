@@ -2,6 +2,7 @@ import requests
 import json
 
 import twitter
+import googletrans
 
 
 class Twitter:
@@ -62,3 +63,11 @@ class ToneAnalyzer:
         response = self._send_request(text)
         tones = self._extract_response(response)
         return tones
+
+
+class Translator:
+    def __init__(self):
+        self.trans = googletrans.Translator()
+
+    def translate(self, text):
+        return self.trans.translate(text).text
