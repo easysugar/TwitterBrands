@@ -1,5 +1,6 @@
 {
-  "Roshen": "\\broshen\\b",
-  "Kyivstar": "\\bkyivstar\\b",
-  "Nemiroff": "\\bnemiroff\\b"
+  "Roshen": "\\broshen\\b|\\bрошен\\d{,6}\\b",
+  "Kyivstar": "\\bkyivstar\\b|\\bки[їе]встар\\d{,6}\\b",
+  "Nemiroff": "\\bnemiroff\\b|\\bнемиро(в|ф|фф)\\d{,4}\\b",
+  "АТБ": "\\bАТБ\\b"
 }

@@ -12,12 +12,12 @@ def _get_tweets(username, n=None, tone=False, brands=False, translate=False):
     tweets = []
     for text in twitter.get_texts(username, n):
         tweet = {'text': text}
+        if brands:
+            tweet['brands'] = brand_detector.find(text)
         if translate:
             text = trans.translate(text)
         if tone:
             tweet['tones'] = tone_analyzer.analyze(text)
-        if brands:
-            tweet['brands'] = brand_detector.find(text)
         tweets.append(tweet)
     return tweets
 
