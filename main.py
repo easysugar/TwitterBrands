@@ -37,8 +37,8 @@ def main():
         return render_template('main.html')
     if request.method == 'POST':
         username = request.form['username']
-        result = _get_tweets(username, 10, tone=False, brands=True, translate=False)
-        return render_template('main.html', result=result, show_tones=False, show_brand=True)
+        result = _get_tweets(username, 10, tone=True, brands=True, translate=False)
+        return render_template('main.html', result=result, show_tones=True, show_brand=True)
 
 
 if __name__ == '__main__':
