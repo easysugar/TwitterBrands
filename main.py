@@ -37,15 +37,15 @@ def main():
         return render_template('main.html')
     if request.method == 'POST':
         username = request.form['username']
-        result = _get_tweets(username, 10, tone=True, brands=True, translate=True)
-        return render_template('main.html', result=result, show_tones=True, show_brand=True)
+        result = _get_tweets(username, 10, tone=False, brands=True, translate=False)
+        return render_template('main.html', result=result, show_tones=False, show_brand=True)
 
 
 if __name__ == '__main__':
     config = json.load(open('resources/config.json'))
     twitter = Twitter(config['twitter'])
     tone_analyzer = ToneAnalyzer(config['tone_analyzer'])
-    brands_regex = json.load(open('resources/brands.json'))
+    brands_regex = json.load(open('resources/brands.json', encoding='utf8'))
     trans = Translator()
     brand_detector = BrandsDetector(brands_regex)
     app.run(debug=True)
