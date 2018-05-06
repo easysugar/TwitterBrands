@@ -6,28 +6,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-    <script type="text/javascript">
-        function chart_brand(brand, anger, disgust, fear, joy, sadness){
-            // alert('hi!');
-            var chart = new CanvasJS.Chart("chart-" + brand, {
-                theme: "dark2",
-                animationEnabled: true,
-                title: {
-                    text: brand
-                },
-                data: [{
-                    type: "column",
-                    dataPoints: [
-                        { label: "Anger",  y: anger },
-                        { label: "Disgust", y: disgust },
-                        { label: "Fear", y: fear },
-                        { label: "Joy",  y: joy },
-                        { label: "Sadness",  y: sadness }
-                    ]
-                }]
-            });
-            chart.render();
-        }
+    <script src="{{ url_for('static', filename='js/brands_charts.js') }}">
 </script>
 </head>
 <body class="bg-dark" style="font-size: 125%;">
@@ -38,14 +17,18 @@
         </div>
     </form>
     {% for item in result %}
-        <div id="chart-{{ item['brand'] }}" class="mx-auto" style="height: 300px; width: 50%;">
-            <script>chart_brand("{{ item['brand'] }}",
-                {{ item['tones']['Anger'] }},
-                {{ item['tones']['Disgust'] }},
-                {{ item['tones']['Fear'] }},
-                {{ item['tones']['Joy'] }},
-                {{ item['tones']['Sadness'] }})</script>
-        </div>
+        {% if item['brand'] != '-' %}
+            <div id="chart-{{ item['brand'] }}" class="mx-auto" style="height: 300px; width: 50%;">
+                <script>
+                    chart_brand("{{ item['brand'] }}",
+                        {{ item['tones']['Anger'] }},
+                        {{ item['tones']['Disgust'] }},
+                        {{ item['tones']['Fear'] }},
+                        {{ item['tones']['Joy'] }},
+                        {{ item['tones']['Sadness'] }})
+                </script>
+            </div>
+        {% endif %}
     {% endfor %}
 </body>
 </html>
