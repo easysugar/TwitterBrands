@@ -13,7 +13,7 @@ def _get_tweets(username, n=None, tone=False, brands=False, translate=False):
     for text in twitter.get_texts(username, n):
         tweet = {'text': text}
         if brands:
-            tweet['brands'] = brand_detector.find(text)
+            tweet['brand'] = brand_detector.find(text)
         if translate:
             text = trans.translate(text)
         if tone:
@@ -31,14 +31,24 @@ def get_tweets(username):
     return json.dumps(tweets, ensure_ascii=False)
 
 
+@app.route('/debug', methods=['POST', 'GET'])
+def debug():
+    if request.method == 'GET':
+        return render_template('debug.html')
+    if request.method == 'POST':
+        username = request.form['username']
+        result = _get_tweets(username, 10, tone=True, brands=True, translate=False)
+        return render_template('debug.html', result=result, show_tones=True, show_brand=True)
+
+
 @app.route('/', methods=['POST', 'GET'])
 def main():
     if request.method == 'GET':
         return render_template('main.html')
     if request.method == 'POST':
         username = request.form['username']
-        result = _get_tweets(username, 10, tone=True, brands=True, translate=False)
-        return render_template('main.html', result=result, show_tones=True, show_brand=True)
+        result = _get_tweets(username, 10, tone=True, brands=True, translate=True)
+        return render_template('main.html', result=result)
 
 
 if __name__ == '__main__':

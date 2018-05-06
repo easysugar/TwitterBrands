@@ -5,6 +5,30 @@
     <title>Twitter Brands Service</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script type="text/javascript">
+        function chart_brand(brand, anger, disgust, fear, joy, sadness){
+            // alert('hi!');
+            var chart = new CanvasJS.Chart("chart-" + brand, {
+                theme: "dark2",
+                animationEnabled: true,
+                title: {
+                    text: brand
+                },
+                data: [{
+                    type: "column",
+                    dataPoints: [
+                        { label: "Anger",  y: anger },
+                        { label: "Disgust", y: disgust },
+                        { label: "Fear", y: fear },
+                        { label: "Joy",  y: joy },
+                        { label: "Sadness",  y: sadness }
+                    ]
+                }]
+            });
+            chart.render();
+        }
+</script>
 </head>
 <body class="bg-dark" style="font-size: 125%;">
     <form action="/" method="POST">
@@ -13,41 +37,15 @@
                    aria-label="Input text" aria-describedby="basic-addon2"/>
         </div>
     </form>
-    {% if result %}
-        <table style="width: 75%" class="mx-auto table-hover table table-light table-bordered">
-            <thead class="thead-light">
-                <tr>
-                    <th>Text</th>
-                    {% if show_brand %}
-                        <th>Brand</th>
-                    {% endif %}
-                    {% if show_tones %}
-                        <th>Anger😠</th>
-                        <th>Disgust🤢</th>
-                        <th>Fear😨</th>
-                        <th>Joy😀</th>
-                        <th>Sadness😞</th>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in result %}
-                    <tr>
-                        <td>{{ item['text'] }}</td>
-                        {% if show_brand %}
-                            <td>{{ item['brands'] }}</td>
-                        {% endif %}
-                        {% if show_tones %}
-                            <td>{{ item['tones']['Anger']|round(2) }}</td>
-                            <td>{{ item['tones']['Disgust']|round(2) }}</td>
-                            <td>{{ item['tones']['Fear']|round(2) }}</td>
-                            <td>{{ item['tones']['Joy']|round(2) }}</td>
-                            <td>{{ item['tones']['Sadness']|round(2) }}</td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% endif %}
+    {% for item in result %}
+        <div id="chart-{{ item['brand'] }}" class="mx-auto" style="height: 300px; width: 50%;">
+            <script>chart_brand("{{ item['brand'] }}",
+                {{ item['tones']['Anger'] }},
+                {{ item['tones']['Disgust'] }},
+                {{ item['tones']['Fear'] }},
+                {{ item['tones']['Joy'] }},
+                {{ item['tones']['Sadness'] }})</script>
+        </div>
+    {% endfor %}
 </body>
 </html>

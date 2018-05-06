@@ -1,3 +1,4 @@
+import re
 import requests
 import json
 
@@ -68,6 +69,13 @@ class ToneAnalyzer:
 class Translator:
     def __init__(self):
         self.trans = googletrans.Translator()
+        self.unsupported_pattern = re.compile(
+            "[^\u0000-\u007e\u0400-\u0500]+",
+            flags=re.UNICODE)
+
+    def remove_unsupported(self, text):
+        return self.unsupported_pattern.sub('', text)
 
     def translate(self, text):
+        text = self.remove_unsupported(text)
         return self.trans.translate(text).text
