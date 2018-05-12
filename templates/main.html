@@ -6,29 +6,20 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-    <script src="{{ url_for('static', filename='js/brands_charts.js') }}">
-</script>
+    <script src="{{ url_for('static', filename='js/brands_charts.js') }}"></script>
 </head>
-<body class="bg-dark" style="font-size: 125%;">
+<body class="bg-light" style="font-size: 125%;">
     <form action="/" method="POST">
         <div class="input-group mb-3 mx-auto" style="width: 40%; margin-top: 200px">
             <input type="text" class="form-control" placeholder="Type twitter username" name="username"
                    aria-label="Input text" aria-describedby="basic-addon2"/>
         </div>
     </form>
-    {% for item in result %}
-        {% if item['brand'] != '-' %}
-            <div id="chart-{{ item['brand'] }}" class="mx-auto" style="height: 300px; width: 50%;">
-                <script>
-                    chart_brand("{{ item['brand'] }}",
-                        {{ item['tones']['Anger'] }},
-                        {{ item['tones']['Disgust'] }},
-                        {{ item['tones']['Fear'] }},
-                        {{ item['tones']['Joy'] }},
-                        {{ item['tones']['Sadness'] }})
-                </script>
-            </div>
-        {% endif %}
-    {% endfor %}
+    {% if result %}
+        <div class="mx-auto" style="width: 70%;">
+            <img src="{{ url_for('static', filename='images/count_distribution.png') }}"/>
+            <img src="{{ url_for('static', filename='images/tones_distribution.png') }}"/>
+        </div>
+    {% endif %}
 </body>
 </html>
