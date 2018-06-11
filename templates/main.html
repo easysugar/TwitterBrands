@@ -17,8 +17,8 @@
     </form>
     {% if result %}
         <div class="mx-auto" style="width: 70%;">
-            <img src="{{ url_for('static', filename='images/count_distribution.png') }}"/>
-            <img src="{{ url_for('static', filename='images/tones_distribution.png') }}"/>
+            <img src="{{ url_for('static', filename='images/' + prefix + 'count_distribution.png') }}"/>
+            <img src="{{ url_for('static', filename='images/' + prefix + 'tones_distribution.png') }}"/>
         </div>
     {% endif %}
 </body>
