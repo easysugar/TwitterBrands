@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 from flask import Flask, render_template, request
 import pandas as pd
@@ -28,38 +29,14 @@ def _get_tweets(username, n=None, brands=False, filter_by_brands=False, tone=Fal
     return pd.DataFrame(tweets)
 
 
-# def _get_tweets_summary(username, n=None):
-#     tweets = _get_tweets(username, n, True, True, True, True)
-#
-#     brands_tweets = defaultdict(list)
-#     for t in tweets:
-#         if t['brand'] != '-':
-#             brands_tweets[t['brand']].append(t)
-#
-#     summary = {}
-#     distribution = {'names': [], 'counts': []}
-#     for brand in brands_tweets:
-#         sum_tones = defaultdict(float)
-#         for t in brands_tweets[brand]:
-#             for tone in t['tones']:
-#                 sum_tones[tone] += t['tones'][tone]
-#         n = len(brands_tweets[brand])
-#         mean_tones = {k: v/n for k, v in sum_tones.items()}
-#         summary[brand] = mean_tones
-#         distribution['names'].append(brand)
-#         distribution['counts'].append(n/len(tweets))
-#
-#     return {'summary': summary, 'distribution': distribution}
-
-
-def save_plots(df):
+def save_plots(df, prefix=''):
     sns.set_style('whitegrid')
     sns.set_context('poster')
 
-    plt.figure(figsize=(12, 6))
+    plt.figure(figsize=(8, 6))
     sns.countplot(df['brand'])
     plt.title('Brands distribution in tweets')
-    plt.savefig('static/images/count_distribution.png')
+    plt.savefig('static/images/%scount_distribution.png' % prefix)
 
     df.dropna(inplace=True)
     df.index = df['brand']
@@ -67,20 +44,20 @@ def save_plots(df):
     df = df.groupby(df.index).agg(np.median).stack().reset_index()
     df.columns = ['brand', 'tones', 'probability']
 
-    plt.figure(figsize=(12, 6))
+    plt.figure(figsize=(8, 6))
     sns.barplot('brand', 'probability', 'tones', df)
     plt.title('Tones distribution in brands')
-    plt.savefig('static/images/tones_distribution.png')
+    plt.savefig('static/images/%stones_distribution.png' % prefix)
 
 
-# @app.route('/debug', methods=['POST', 'GET'])
-# def debug():
-#     if request.method == 'GET':
-#         return render_template('debug.html')
-#     if request.method == 'POST':
-#         username = request.form['username']
-#         result = _get_tweets(username, 10, tone=True, brands=True, translate=False)
-#         return render_template('debug.html', result=result, show_tones=True, show_brand=True)
+@app.route('/debug', methods=['POST', 'GET'])
+def debug():
+    if request.method == 'GET':
+        return render_template('debug.html')
+    if request.method == 'POST':
+        username = request.form['username']
+        result = _get_tweets(username, 10, tone=True, brands=True, translate=False)
+        return render_template('debug.html', result=result, show_tones=True, show_brand=True)
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -90,9 +67,9 @@ def main():
     if request.method == 'POST':
         username = request.form['username']
         df = _get_tweets(username, 200, True, True, True, True)
-        save_plots(df)
-        df.to_pickle('./tmp.pkl')
-        return render_template('main.html', result=True)
+        prefix = str(round(datetime.now().timestamp()))
+        save_plots(df, prefix)
+        return render_template('main.html', result=True, prefix=prefix)
 
 
 if __name__ == '__main__':
